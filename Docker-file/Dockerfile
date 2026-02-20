@@ -1,9 +1,9 @@
-FROM openjdk:11 AS BUILD_IMAGE
+FROM amazoncorretto:11 AS BUILD_IMAGE
 RUN apt update && apt install maven -y
 RUN git clone https://github.com/LYHAMSEA/vprofile-project.git
 RUN cd vprofile-project && git checkout docker && mvn install
 
-FROM tomcat:9-jre11
+FROM tomcat:9-jdk11-corretto
 
 RUN rm -rf /usr/local/tomcat/webapps/*
 
