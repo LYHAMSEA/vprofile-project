@@ -1,5 +1,5 @@
 FROM amazoncorretto:11 AS BUILD_IMAGE
-RUN apt update && apt install maven -y
+RUN yum update -y && apt install -y maven git
 RUN git clone https://github.com/LYHAMSEA/vprofile-project.git
 RUN cd vprofile-project && git checkout docker && mvn install
 
