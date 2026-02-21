@@ -18,6 +18,7 @@ env:
   
 permissions: 
   contents: read
+  security-events: write
 
 jobs:
   Build:
@@ -119,3 +120,16 @@ jobs:
         run: |
           docker build -f Docker-file/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      
+      - name: Run Trivy Scan (SARIF)
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Upload Results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
